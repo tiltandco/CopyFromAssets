@@ -41,14 +41,14 @@ public class CopyFromAssets extends CordovaPlugin {
 
 	
 	@Override
-	public boolean execute(String action, String fileName, CallbackContext callbackContext) {
+	public boolean execute(String action, String file_name, CallbackContext callbackContext) {
 		Log.d(TAG, "Plugin Called");
 		this.callbackContext = callbackContext;
 		
 			
 			if (action.equals("copyFile")) {
 				try {
-					this.copyFile(fileName);
+					this.copyFile(file_name);
 					Log.i("success","!!! aseet copied");
 					callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
 					return true;
@@ -66,11 +66,11 @@ public class CopyFromAssets extends CordovaPlugin {
 			return false;
 		
 	}
-	public String copyFile(String arg_assetFile) throws IOException {
+	public String copyFile(String file_name) throws IOException {
 		
 		File externalPath = Environment.getExternalStorageDirectory();	
 		String appName =  this.cordova.getActivity().getApplicationContext().getPackageName();
-		File destination_file = new File( externalPath + addLeadingSlash("/Android/data/" + appName+'/'+arg_assetFile) );
+		File destination_file = new File( externalPath + addLeadingSlash("/Android/data/" + appName+'/'+file_name) );
 		File destination_dir = destination_file.getParentFile();
 		String destination_file_path = destination_file.getPath();
 		String destination_file_name = destination_file.getName();
@@ -80,7 +80,7 @@ public class CopyFromAssets extends CordovaPlugin {
 		}
 		
 		createDir(destination_dir);
-		copyAssetFile(arg_assetFile, destination_file_path);
+		copyAssetFile(file_name, destination_file_path);
 		
 		return destination_file_path;
 	}
@@ -89,8 +89,8 @@ public class CopyFromAssets extends CordovaPlugin {
 	/**
      * Copies asset file bytes to destination path
      */
-	public void copyAssetFile(String assetFilePath, String destinationFilePath) throws IOException{
-		InputStream in =  getClass().getResourceAsStream("/assets/cms.zip");
+	public void copyAssetFile(String file_name, String destinationFilePath) throws IOException{
+		InputStream in =  getClass().getResourceAsStream("/assets/"+file_name);
 		//InputStream in = this.cordova.getActivity().getApplicationContext().getAssets().open(assetFilePath);
 		OutputStream out = new FileOutputStream(destinationFilePath);
 		
