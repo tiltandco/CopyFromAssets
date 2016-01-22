@@ -11,8 +11,8 @@
 
   var CopyFromAssets = function() {};
 
-  CopyFromAssets.prototype.copyFile = function(params, successCallback, failCallback) {
-    return cordova.exec(successCallback, failCallback, 'CopyFromAssets', 'copyFile', [params]);
+  CopyFromAssets.prototype.copyFile = function(filePath, successCallback, failCallback) {
+    return cordova.exec(successCallback, failCallback, 'CopyFromAssets', 'copyFile', filePath);
   };
 
 
