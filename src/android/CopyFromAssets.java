@@ -85,7 +85,7 @@ public class CopyFromAssets extends CordovaPlugin {
 		}
 		
 		createDir(destination_dir);
-		copyAssetFile(copyFileName, saveAsFileName, destination_file_path);
+		copyAssetFile(copyFileName, destination_file_path);
 		
 		return destination_file_path;
 	}
