@@ -51,6 +51,8 @@ public class CopyFromAssets extends CordovaPlugin {
 					JSONObject obj = args.getJSONObject(0);
 					String copyFileName = obj.getString("copyFileName");
 					String saveAsFileName = obj.getString("saveAsFileName")
+					Log.i("copyFileName",copyFileName);
+					Log.i("saveAsFileName",saveAsFileName);
 					this.copyFile(copyFileName, saveAsFileName);
 					Log.i("success","!!! aseet copied");
 					callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
@@ -70,8 +72,7 @@ public class CopyFromAssets extends CordovaPlugin {
 		
 	}
 	public String copyFile(String copyFileName, String saveAsFileName) throws IOException {
-		Log.i("copyFileName",copyFileName);
-		Log.i("saveAsFileName",saveAsFileName);
+		
 		File externalPath = Environment.getExternalStorageDirectory();	
 		String appName =  this.cordova.getActivity().getApplicationContext().getPackageName();
 		File destination_file = new File( externalPath + addLeadingSlash("/Android/data/" + appName+'/'+saveAsFileName) );
