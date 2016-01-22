@@ -90,6 +90,8 @@ public class CopyFromAssets extends CordovaPlugin {
      * Copies asset file bytes to destination path
      */
 	public void copyAssetFile(String file_name, String destinationFilePath) throws IOException{
+		
+		Log.i("file name","!!! /assets/"+file_name);
 		InputStream in =  getClass().getResourceAsStream("/assets/"+file_name);
 		//InputStream in = this.cordova.getActivity().getApplicationContext().getAssets().open(assetFilePath);
 		OutputStream out = new FileOutputStream(destinationFilePath);
