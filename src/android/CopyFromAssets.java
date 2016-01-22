@@ -50,7 +50,7 @@ public class CopyFromAssets extends CordovaPlugin {
 				try {
 					JSONObject obj = args.getJSONObject(0);
 					String copyFileName = obj.getString("copyFileName");
-					String saveAsFileName = obj.getString("saveAsFileName")
+					String saveAsFileName = obj.getString("saveAsFileName");
 					Log.i("copyFileName",copyFileName);
 					Log.i("saveAsFileName",saveAsFileName);
 					this.copyFile(copyFileName, saveAsFileName);
