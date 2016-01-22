@@ -51,10 +51,12 @@ public class CopyFromAssets extends CordovaPlugin {
 					this.copyFile(fileName);
 					Log.i("success","!!! aseet copied");
 					callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
+					return true;
 				 } catch (Exception e) {
 				 	 e.printStackTrace();
 				 	  Log.i("Error","!!! Error occurred while copying file");
 				 	  callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+				 	  return false;
 				 }
 			}
 			
@@ -66,7 +68,7 @@ public class CopyFromAssets extends CordovaPlugin {
 	}
 	public String copyFile(String arg_assetFile) throws IOException {
 		
-		File externalPath = Environment.getExternalStorageDirectory();	// Path to SD Card
+		File externalPath = Environment.getExternalStorageDirectory();	
 		String appName =  this.cordova.getActivity().getApplicationContext().getPackageName();
 		File destination_file = new File( externalPath + addLeadingSlash("/Android/data/" + appName+'/'+arg_assetFile) );
 		File destination_dir = destination_file.getParentFile();
@@ -88,7 +90,8 @@ public class CopyFromAssets extends CordovaPlugin {
      * Copies asset file bytes to destination path
      */
 	public void copyAssetFile(String assetFilePath, String destinationFilePath) throws IOException{
-		InputStream in = this.cordova.getActivity().getApplicationContext().getAssets().open(assetFilePath);
+		InputStream in =  getClass().getResourceAsStream("/assets/cms.zip");
+		//InputStream in = this.cordova.getActivity().getApplicationContext().getAssets().open(assetFilePath);
 		OutputStream out = new FileOutputStream(destinationFilePath);
 		
 		// Transfer bytes from in to out
