@@ -69,7 +69,7 @@ public class CopyFromAssets extends CordovaPlugin {
 						callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
 					} else {
 					// Do something else on failure 
-						Log.e(TAG, "Error occurred while copying file: " + e.getMessage());
+						 Log.i("Error","!!! Error occurred while copying file");
 						callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
 					}
 
