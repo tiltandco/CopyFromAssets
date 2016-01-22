@@ -53,7 +53,7 @@ public class CopyFromAssets extends CordovaPlugin {
 
 				 try {
 					// create the application directory   
-					String appName =  getApplicationContext().getPackageName();
+					String appName =  this.cordova.getActivity().getApplicationContext().getPackageName();
 					Log.i("appName",appName);
 					File folder = new File(Environment.getExternalStorageDirectory()+"/Android/data/" + appName);
 					boolean success = true;
@@ -88,8 +88,8 @@ public class CopyFromAssets extends CordovaPlugin {
 	
 	
  	private void copyAssets(String filename) {
-		AssetManager assetManager = getAssets();
-		String appName =  getApplicationContext().getPackageName();
+		AssetManager assetManager = this.cordova.getActivity().getApplicationContext().getAssets();
+		String appName =  this.cordova.getActivity().getApplicationContext().getPackageName();
 		InputStream in = null;
 		OutputStream out = null;
 		try {
