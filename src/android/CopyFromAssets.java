@@ -51,32 +51,27 @@ public class CopyFromAssets extends CordovaPlugin {
 
 
 
-				 try {
-					// create the application directory   
-					String appName =  this.cordova.getActivity().getApplicationContext().getPackageName();
-					Log.i("appName",appName);
-					File folder = new File(Environment.getExternalStorageDirectory()+"/Android/data/" + appName);
-					boolean success = true;
-					if (!folder.exists()) {
-						Log.i("folder","does not exits");
-						success = folder.mkdir();
-					} else {
-						Log.i("folder","folder exits");
-					}
-					if (success) {
-						// Do something on success
-						Log.i("success","!!! aseet copied");
-						callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
-					} else {
-					// Do something else on failure 
-						 Log.i("Error","!!! Error occurred while copying file");
-						callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
-					}
-
+				// create the application directory   
+				String appName =  this.cordova.getActivity().getApplicationContext().getPackageName();
+				Log.i("appName",appName);
+				File folder = new File(Environment.getExternalStorageDirectory()+"/Android/data/" + appName);
+				boolean success = true;
+				if (!folder.exists()) {
+					Log.i("folder","does not exits");
+					success = folder.mkdir();
+				} else {
+					Log.i("folder","folder exits");
+				}
+				
+				try {
 					this.copyAssets(fileName);
-		        } catch (Exception e) {
-		          e.printStackTrace();
-		        }
+					Log.i("success","!!! aseet copied");
+					callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
+				 } catch (Exception e) {
+				 	 e.printStackTrace();
+				 	  Log.i("Error","!!! Error occurred while copying file");
+				 	  callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+				 }
 			}
 			
 			
@@ -90,10 +85,12 @@ public class CopyFromAssets extends CordovaPlugin {
  	private void copyAssets(String filename) {
 		AssetManager assetManager = this.cordova.getActivity().getApplicationContext().getAssets();
 		String appName =  this.cordova.getActivity().getApplicationContext().getPackageName();
+		Log.i("appName",appName);
 		InputStream in = null;
 		OutputStream out = null;
 		try {
 		  in = assetManager.open(filename);
+		  Log.i("tag", "path: " + Environment.getExternalStorageDirectory()+"/Android/data/" + appName);
 		  File outFile = new File(Environment.getExternalStorageDirectory()+"/Android/data/" + appName,
 		      filename);
 		  out = new FileOutputStream(outFile);
