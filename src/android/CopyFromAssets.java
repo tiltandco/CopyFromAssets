@@ -41,14 +41,17 @@ public class CopyFromAssets extends CordovaPlugin {
 
 	
 	@Override
-	public boolean execute(String action, String file_name, CallbackContext callbackContext) {
+	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
 		Log.d(TAG, "Plugin Called");
 		this.callbackContext = callbackContext;
 		
 			
 			if (action.equals("copyFile")) {
 				try {
-					this.copyFile(file_name);
+					JSONObject obj = args.getJSONObject(0);
+					String copyFileName = obj.getString("copyFileName");
+					String saveAsFileName = obj.getString("saveAsFileName")
+					this.copyFile(copyFileName, saveAsFileName);
 					Log.i("success","!!! aseet copied");
 					callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
 					return true;
@@ -66,11 +69,12 @@ public class CopyFromAssets extends CordovaPlugin {
 			return false;
 		
 	}
-	public String copyFile(String file_name) throws IOException {
-		
+	public String copyFile(String copyFileName, String saveAsFileName) throws IOException {
+		Log.i("copyFileName",copyFileName);
+		Log.i("saveAsFileName",saveAsFileName);
 		File externalPath = Environment.getExternalStorageDirectory();	
 		String appName =  this.cordova.getActivity().getApplicationContext().getPackageName();
-		File destination_file = new File( externalPath + addLeadingSlash("/Android/data/" + appName+'/'+file_name) );
+		File destination_file = new File( externalPath + addLeadingSlash("/Android/data/" + appName+'/'+saveAsFileName) );
 		File destination_dir = destination_file.getParentFile();
 		String destination_file_path = destination_file.getPath();
 		String destination_file_name = destination_file.getName();
@@ -80,7 +84,7 @@ public class CopyFromAssets extends CordovaPlugin {
 		}
 		
 		createDir(destination_dir);
-		copyAssetFile(file_name, destination_file_path);
+		copyAssetFile(copyFileName, saveAsFileName, destination_file_path);
 		
 		return destination_file_path;
 	}
@@ -89,11 +93,11 @@ public class CopyFromAssets extends CordovaPlugin {
 	/**
      * Copies asset file bytes to destination path
      */
-	public void copyAssetFile(String file_name, String destinationFilePath) throws IOException{
+	public void copyAssetFile(String copyFileName,  String destinationFilePath) throws IOException{
 		
-		Log.i("file name","!!! /assets/"+file_name);
-		InputStream in =  getClass().getResourceAsStream("/assets/"+file_name);
-		//InputStream in = this.cordova.getActivity().getApplicationContext().getAssets().open(assetFilePath);
+		
+		//InputStream in =  getClass().getResourceAsStream("/assets/"+file_name);
+		InputStream in = this.cordova.getActivity().getApplicationContext().getAssets().open(copyFileName);
 		OutputStream out = new FileOutputStream(destinationFilePath);
 		
 		// Transfer bytes from in to out
