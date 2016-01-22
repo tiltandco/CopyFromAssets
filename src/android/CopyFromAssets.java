@@ -45,26 +45,10 @@ public class CopyFromAssets extends CordovaPlugin {
 		Log.d(TAG, "Plugin Called");
 		this.callbackContext = callbackContext;
 		
-
 			
 			if (action.equals("copyFile")) {
-
-
-
-				// create the application directory   
-				String appName =  this.cordova.getActivity().getApplicationContext().getPackageName();
-				Log.i("appName",appName);
-				File folder = new File(Environment.getExternalStorageDirectory()+"/Android/data/" + appName);
-				boolean success = true;
-				if (!folder.exists()) {
-					Log.i("folder","does not exits");
-					success = folder.mkdir();
-				} else {
-					Log.i("folder","folder exits");
-				}
-				
 				try {
-					this.copyAssets(fileName);
+					this.copyFile(fileName);
 					Log.i("success","!!! aseet copied");
 					callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
 				 } catch (Exception e) {
@@ -80,36 +64,65 @@ public class CopyFromAssets extends CordovaPlugin {
 			return false;
 		
 	}
-	
-	
- 	private void copyAssets(String filename) {
-		AssetManager assetManager = this.cordova.getActivity().getApplicationContext().getAssets();
+	public String copyFile(String arg_assetFile) throws IOException {
+		
+		File externalPath = Environment.getExternalStorageDirectory();	// Path to SD Card
 		String appName =  this.cordova.getActivity().getApplicationContext().getPackageName();
-		Log.i("appName",appName);
-		InputStream in = null;
-		OutputStream out = null;
-		try {
-		  in = assetManager.open(filename);
-		  Log.i("tag", "path: " + Environment.getExternalStorageDirectory()+"/Android/data/" + appName);
-		  File outFile = new File(Environment.getExternalStorageDirectory()+"/Android/data/" + appName,
-		      filename);
-		  out = new FileOutputStream(outFile);
-		  copyFile(in, out);
-		  in.close();
-		  in = null;
-		  out.flush();
-		  out.close();
-		  out = null;
-		} catch (IOException e) {
-		  Log.e("tag", "Failed to copy asset file: " + filename, e);
+		File destination_file = new File( externalPath + addLeadingSlash("/Android/data/" + appName+'/'+arg_assetFile) );
+		File destination_dir = destination_file.getParentFile();
+		String destination_file_path = destination_file.getPath();
+		String destination_file_name = destination_file.getName();
+		
+		if(destination_file_name.length()<=0){
+			throw new IOException("Destination file name is missing");
 		}
- 	}
+		
+		createDir(destination_dir);
+		copyAssetFile(arg_assetFile, destination_file_path);
+		
+		return destination_file_path;
+	}
 
-  	private void copyFile(InputStream in, OutputStream out) throws IOException {
-	    byte[] buffer = new byte[1024];
-	    int read;
-	    while ((read = in.read(buffer)) != -1) {
-	      out.write(buffer, 0, read);
-	    }
-  	}
+
+	/**
+     * Copies asset file bytes to destination path
+     */
+	public void copyAssetFile(String assetFilePath, String destinationFilePath) throws IOException{
+		InputStream in = this.cordova.getActivity().getApplicationContext().getAssets().open(assetFilePath);
+		OutputStream out = new FileOutputStream(destinationFilePath);
+		
+		// Transfer bytes from in to out
+		byte[] buf = new byte[1024];
+		int len; while ((len = in.read(buf)) > 0) out.write(buf, 0, len);
+		in.close(); out.close();
+	}
+	/**
+     * Create a directory for the provided File object
+     */
+	public void createDir(File dir) throws IOException {
+		if (dir.exists()){
+			if(!dir.isDirectory()) {
+				throw new IOException("Can't create directory, a file is in the way");
+			}
+		} else {
+			dir.mkdirs();
+			if (!dir.isDirectory()) {
+				throw new IOException("Unable to create directory");
+			}
+		}
+	}
+	
+
+	// Adds a leading slash to path if it doesn't exist
+	public String addLeadingSlash(String path){
+		if(path.charAt(0)!='/'){
+		    path = "/" + path;
+		}
+		return path;
+	}
+	
+	
+ 	
+
+
 }
