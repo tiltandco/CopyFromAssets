@@ -42,19 +42,14 @@ public class CopyFromAssets extends CordovaPlugin {
 	
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
-		Log.d(TAG, "Plugin Called");
 		this.callbackContext = callbackContext;
-		
-			
+			// copyFile action
 			if (action.equals("copyFile")) {
 				try {
 					JSONObject obj = args.getJSONObject(0);
 					String copyFileName = obj.getString("copyFileName");
 					String saveAsFileName = obj.getString("saveAsFileName");
-					Log.i("copyFileName",copyFileName);
-					Log.i("saveAsFileName",saveAsFileName);
 					this.copyFile(copyFileName, saveAsFileName);
-					Log.i("success","!!! aseet copied");
 					callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
 					return true;
 				 } catch (Exception e) {
@@ -64,9 +59,6 @@ public class CopyFromAssets extends CordovaPlugin {
 				 	  return false;
 				 }
 			}
-			
-			
-			
 			callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
 			return false;
 		
@@ -95,12 +87,8 @@ public class CopyFromAssets extends CordovaPlugin {
      * Copies asset file bytes to destination path
      */
 	public void copyAssetFile(String copyFileName,  String destinationFilePath) throws IOException{
-		
-		
-		//InputStream in =  getClass().getResourceAsStream("/assets/"+file_name);
 		InputStream in = this.cordova.getActivity().getApplicationContext().getAssets().open(copyFileName);
 		OutputStream out = new FileOutputStream(destinationFilePath);
-		
 		// Transfer bytes from in to out
 		byte[] buf = new byte[1024];
 		int len; while ((len = in.read(buf)) > 0) out.write(buf, 0, len);
@@ -121,8 +109,6 @@ public class CopyFromAssets extends CordovaPlugin {
 			}
 		}
 	}
-	
-
 	// Adds a leading slash to path if it doesn't exist
 	public String addLeadingSlash(String path){
 		if(path.charAt(0)!='/'){
@@ -130,9 +116,5 @@ public class CopyFromAssets extends CordovaPlugin {
 		}
 		return path;
 	}
-	
-	
- 	
-
 
 }

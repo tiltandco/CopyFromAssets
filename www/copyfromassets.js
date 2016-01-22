@@ -15,7 +15,6 @@
     return cordova.exec(successCallback, failCallback, 'CopyFromAssets', 'copyFile', [params]);
   };
 
-
   window.copyFromAssets = new CopyFromAssets();
   
 })(window.PhoneGap || window.Cordova || window.cordova);
